@@ -34,7 +34,77 @@ A Blank Document opens up into which the following source code can be typed down
 
 ## Source Code – Using Case Statement :
 
-(Include program here)
+
+```
+module alu_32bit_case(y, a, b, f);
+  input [31:0] a;
+  input [31:0] b;
+  input [2:0] f;
+  output reg [31:0] y;
+
+  always @(*) begin
+    case(f)
+      3'b000: y = a & b;       // AND
+      3'b001: y = a | b;       // OR
+      3'b010: y = ~(a & b);    // NAND
+      3'b011: y = ~(a | b);    // NOR
+      3'b100: y = a + b;       // ADD
+      3'b101: y = a - b;       // SUB
+      3'b110: y = a * b;       // MUL
+      default: y = 32'bx;      // Undefined
+    endcase
+  end
+
+endmodule
+```
+
+```
+module test_alu_32bit_case;
+
+  reg [31:0] a;
+  reg [31:0] b;
+  reg [2:0] f;
+  wire [31:0] y;
+
+  // Instantiate the ALU module
+  alu_32bit_case uut (
+    .y(y),
+    .a(a),
+    .b(b),
+    .f(f)
+  );
+
+  initial begin
+    // Test AND
+    a = 32'hAAAAAAAA; b = 32'h55555555; f = 3'b000; #10;
+    
+    // Test OR
+    a = 32'hAAAAAAAA; b = 32'h55555555; f = 3'b001; #10;
+
+    // Test NAND
+    a = 32'hFFFFFFFF; b = 32'h00000000; f = 3'b010; #10;
+
+    // Test NOR
+    a = 32'h00000000; b = 32'h00000000; f = 3'b011; #10;
+
+    // Test ADD
+    a = 32'd100; b = 32'd25; f = 3'b100; #10;
+
+    // Test SUB
+    a = 32'd100; b = 32'd25; f = 3'b101; #10;
+
+    // Test MUL
+    a = 32'd10; b = 32'd3; f = 3'b110; #10;
+
+    // Test default
+    f = 3'b111; #10;
+
+    $finish;
+  end
+
+endmodule
+```
+
 
 Use Save option or Ctrl+S to save the code or click on the save option from the top most right corner and close the text file.
 
@@ -62,7 +132,8 @@ After this you can see the window like below
 
 ### Fig 2: Invoke the Cadence Environment
 
-To Launch Simulation tool 
+To Laun![Screenshot 2025-04-28 161008](https://github.com/user-attachments/assets/ecf84490-d6e5-4f96-b57a-bf19fd49ba5c)
+ch Simulation tool 
 
 •linux:/> nclaunch -new& // “-new” option is used for invoking NCVERILOG for the first time for any design 
 
@@ -74,12 +145,14 @@ or
 It will invoke the nclaunch window for functional simulation we can compile,elaborate and simulate it using Multiple Step .
 
 ### Fig 3: Setting Multi-step simulation
+![Screenshot 2025-04-28 160936](https://github.com/user-attachments/assets/06546329-df7a-4364-9faa-5bc30bfbe1a4)
 
 Select Multiple Step and then select “Create cds.lib File” as shown in below figure 
 
 Click the cds.lib file and save the file by clicking on Save option 
 
 ### Fig 4:cds.lib file Creation
+![Screenshot 2025-04-28 161030](https://github.com/user-attachments/assets/6335f878-72fe-4f67-9788-19b3d670c384)
 
 Save cds.lib file and select the correct option for cds.lib file format based on the HDL Language and Libraries used. 
 
@@ -92,6 +165,7 @@ A Click “OK” in the “nclaunch: Open Design Directory” window as shown in
 ![image](https://github.com/user-attachments/assets/d5202b97-ee5c-4e0e-9eaf-5f3fa733e546)
 
 ### Fig 5: Selection of Don’t include any libraries
+![Screenshot 2025-04-28 161122](https://github.com/user-attachments/assets/f972ba4b-42e6-4182-bb86-170dbcbf2db7)
 
 A ‘NCLaunch window’ appears as shown in figure below
 
@@ -102,6 +176,7 @@ Worklib is the directory where all the compiled codes are stored while Snapshot 
 To perform the function simulation, the following three steps are involved Compilation, Elaboration and Simulation. 
 
 ### Fig 6: Nclaunch Window
+![Screenshot 2025-04-28 161144](https://github.com/user-attachments/assets/d9d698e5-c39b-4f5e-b946-222c31d5193b)
 
 ## Step 1: Compilation:
 
@@ -126,6 +201,7 @@ Left side select the file and in Tools : launch verilog compiler with current se
 Worklib is the directory where all the compiled codes are stored while Snapshot will have output of elaboration which in turn goes for simulation 
 
 ### Fig 7: Compiled database in worklib
+![Screenshot 2025-04-28 161205](https://github.com/user-attachments/assets/3c5bfc7d-16d5-4016-a5d1-f766f299aa1b)
 
 After compilation it will come under worklib you can see in right side window
 
@@ -161,6 +237,8 @@ After elaboration the file will come under snapshot. Select the test bench and s
 
 ## Fig 8: Elaboration Launch Option
 
+![Screenshot 2025-04-28 161228](https://github.com/user-attachments/assets/7e008451-f1d8-4d20-a492-8739dbae66a9)
+
 ## Step 3: Simulation: 
 
 – Simulate with the given test vectors over a period of time to observe the output behaviour. 
@@ -175,9 +253,13 @@ Steps for simulation – Run the simulation command with simulator options
 
 ## Fig 9: Design Browser window for simulation
 
+![Screenshot 2025-04-28 161341](https://github.com/user-attachments/assets/afb1c4bc-06f0-4f44-bcca-b051f3fe82ae)
+
 ## Fig 10:Simulation Waveform Window
+![Screenshot 2025-04-28 161414](https://github.com/user-attachments/assets/9cac6e3e-1e34-45a7-b2ea-52d5db84b1b3)
 
 ## Fig 11:Simulation Waveform Window
+![Screenshot 2025-04-28 161434](https://github.com/user-attachments/assets/5e0bb16c-1613-4b61-941e-c97a0aad144d)
 
 ### Result
 
